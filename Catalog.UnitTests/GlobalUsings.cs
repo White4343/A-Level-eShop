@@ -1,0 +1,11 @@
+global using Xunit;
+global using Catalog.API.Repositories.Interfaces;
+global using Catalog.API.Services.Interfaces;
+global using Moq;
+global using Catalog.API.Data;
+global using Catalog.API.Services;
+global using Catalog.API.Data.Entities;
+global using Infrastructure.Services.Interfaces;
+global using Microsoft.Extensions.Logging;
+global using Microsoft.EntityFrameworkCore.Storage;
+global using Type = Catalog.API.Data.Entities.Type;

@@ -1,0 +1,16 @@
+﻿global using Catalog.API.Data.Entities;
+global using Catalog.API.Models.Response;
+global using Catalog.API.Repositories.Interfaces;
+global using Catalog.API.Services.Interfaces;
+global using Catalog.API.Data;
+global using Catalog.API.Repositories;
+global using Catalog.API.Services;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.IdentityModel.Tokens;
+global using Microsoft.OpenApi.Models;
+global using Catalog.API.Models.Dtos;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Mvc;
+global using Catalog.API.Models.Enums;
+global using Catalog.API.Models.Request;
+global using AutoMapper;
