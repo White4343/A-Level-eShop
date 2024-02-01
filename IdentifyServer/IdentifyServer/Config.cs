@@ -14,7 +14,8 @@ public static class Config
     public static IEnumerable<ApiScope> ApiScopes =>
         new ApiScope[]
         {
-            new ApiScope(name: "catalog.fullaccess", displayName: "Catalog API")
+            new ApiScope(name: "catalog.fullaccess", displayName: "Catalog API"),
+            new ApiScope(name: "basket.fullaccess", displayName: "Basket API")
         };
 
     public static IEnumerable<Client> Clients =>
@@ -43,6 +44,21 @@ public static class Config
                 AllowedScopes =
                 {
                     "catalog.fullaccess"
+                }
+            },
+            new Client
+            {
+                ClientId = "basketswaggerui",
+                ClientName = "Basket Swagger UI",
+                AllowedGrantTypes = GrantTypes.Implicit,
+                AllowAccessTokensViaBrowser = true,
+
+                RedirectUris = { "http://localhost:5153/swagger/oauth2-redirect.html" },
+                PostLogoutRedirectUris = { "http://localhost:5153/swagger/" },
+
+                AllowedScopes =
+                {
+                    "basket.fullaccess"
                 }
             }
         };
