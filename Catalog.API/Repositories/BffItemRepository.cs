@@ -31,8 +31,6 @@ namespace Catalog.API.Repositories
             var totalItems = await query.LongCountAsync();
 
             var itemsOnPage = await query
-                .Include(i => i.Brand)
-                .Include(i => i.Type)
                 .OrderBy(o => o.Name)
                 .Skip(pageSize * pageIndex)
                 .Take(pageSize)

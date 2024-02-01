@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/IdentifyServer/IdentifyServer/tempkey.jwk
+/IdentifyServer/IdentifyServer/keys/is-signing-key-87EF02B1B0B5F692983AACF400F5B56C.json

@@ -1,4 +1,11 @@
-namespace Catalog.API
+using Basket.API.Repositories;
+using Basket.API.Repositories.Interfaces;
+using Basket.API.Services;
+using Basket.API.Services.Interfaces;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+
+namespace Basket.API
 {
     public class Program
     {
@@ -25,22 +32,26 @@ namespace Catalog.API
 
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("Catalog.FullAccess", policy =>
+                options.AddPolicy("Basket.FullAccess", policy =>
                 {
                     policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("scope", "catalog.fullaccess");
+                    policy.RequireClaim("scope", "basket.fullaccess");
                 });
             });
 
+            // Add services to the container.
+
+            builder.Services.AddAutoMapper(typeof(Program));
+
+            builder.Services.AddTransient<IBasketRepository, BasketRepository>();
+            builder.Services.AddTransient<IBasketService, BasketService>();
+
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            
-
-
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Catalog.API", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Basket.API", Version = "v1" });
 
                 options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                 {
@@ -53,7 +64,7 @@ namespace Catalog.API
                             TokenUrl = new Uri($"{authority}/connect/token"),
                             Scopes = new Dictionary<string, string>
                             {
-                                { "catalog.fullaccess", "Catalog API" }
+                                { "basket.fullaccess", "Basket API" }
                             }
                         }
                     }
@@ -70,28 +81,11 @@ namespace Catalog.API
                                 Type = ReferenceType.SecurityScheme
                             }
                         },
-                        new[] { "catalog.fullaccess" }
+                        new[] { "basket.fullaccess" }
                     }
                 });
             });
 
-            // Add services to the container.
-
-            builder.Services.AddAutoMapper(typeof(Program));
-
-            builder.Services.AddTransient<IBrandRepository, BrandRepository>();
-            builder.Services.AddTransient<IBrandService, BrandService>();
-
-            builder.Services.AddTransient<ITypeRepository, TypeRepository>();
-            builder.Services.AddTransient<ITypeService, TypeService>();
-
-            builder.Services.AddTransient<IItemRepository, ItemRepository>();
-            builder.Services.AddTransient<IItemService, ItemService>();
-
-            builder.Services.AddTransient<IBffItemRepository, BffItemRepository>();
-            builder.Services.AddTransient<IBffItemService, BffItemService>();
-
-            // Connection to postgres database
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("ConnectionString")));
 
@@ -114,9 +108,9 @@ namespace Catalog.API
                 app.UseSwagger();
                 app.UseSwaggerUI(setup =>
                 {
-                    setup.SwaggerEndpoint($"{configuration["PathBase"]}/swagger/v1/swagger.json", "Catalog.API v1");
-                    setup.OAuthClientId("catalogswaggerui");
-                    setup.OAuthAppName("Catalog Swagger UI");
+                    setup.SwaggerEndpoint($"{configuration["PathBase"]}/swagger/v1/swagger.json", "Basket.API v1");
+                    setup.OAuthClientId("basketswaggerui");
+                    setup.OAuthAppName("Basket Swagger UI");
                 });
             }
 
@@ -126,12 +120,12 @@ namespace Catalog.API
             app.UseAuthentication();
             app.UseAuthorization();
 
+
             app.MapControllers();
 
             CreateDbIfNotExists(app);
             app.Run();
 
-            
             IConfiguration GetConfiguration()
             {
                 var builder = new ConfigurationBuilder()
