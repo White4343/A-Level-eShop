@@ -39,6 +39,7 @@
             {
                 var itemDto = new ItemDto
                 {
+                    Id = item.Id,
                     Name = item.Name,
                     Description = item.Description,
                     Price = item.Price,

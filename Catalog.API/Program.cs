@@ -36,7 +36,6 @@ namespace Catalog.API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             
 
-            // for whatever reason, token from IdentityServer4 is not setting for swagger and any controller that has [Authorize] attribute does not work
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
