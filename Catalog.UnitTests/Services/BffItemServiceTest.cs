@@ -1,4 +1,5 @@
-﻿using Catalog.API.Models;
+﻿using AutoMapper;
+using Catalog.API.Models;
 
 namespace Catalog.UnitTests.Services
 {
@@ -8,17 +9,19 @@ namespace Catalog.UnitTests.Services
         private readonly Mock<IBffItemRepository> _bffItemRepositoryMock;
         private readonly Mock<IDbContextWrapper<AppDbContext>> _dbContextWrapperMock;
         private readonly Mock<ILogger<BffItemService>> _loggerMock;
+        private readonly Mock<IMapper> _mapperMock;
 
         public BffItemServiceTest()
         {
             _bffItemRepositoryMock = new Mock<IBffItemRepository>();
             _dbContextWrapperMock = new Mock<IDbContextWrapper<AppDbContext>>();
             _loggerMock = new Mock<ILogger<BffItemService>>();
+            _mapperMock = new Mock<IMapper>();
 
             var dbContextTransactionMock = new Mock<IDbContextTransaction>();
             _dbContextWrapperMock.Setup(x => x.BeginTransactionAsync(It.IsAny<CancellationToken>())).ReturnsAsync(dbContextTransactionMock.Object);
 
-            _bffItemService = new BffItemService(_bffItemRepositoryMock.Object, _loggerMock.Object);
+            _bffItemService = new BffItemService(_bffItemRepositoryMock.Object, _loggerMock.Object, _mapperMock.Object);
         }
 
         [Fact]
@@ -28,7 +31,7 @@ namespace Catalog.UnitTests.Services
             _bffItemRepositoryMock.Setup(x => x.GetByPageAsync(It.IsAny<Int32>(), It.IsAny<Int32>(), It.IsAny<Int32?>(), It.IsAny<Int32?>())).ReturnsAsync(new PaginatedItems<Item>());
 
             // Act
-            var result = await _bffItemService.GetByPageAsync(1, 1, null, null);
+            var result = await _bffItemService.GetByPageAsync(1, 1, null);
 
             // Assert
             Assert.NotNull(result);
@@ -41,7 +44,7 @@ namespace Catalog.UnitTests.Services
             _bffItemRepositoryMock.Setup(x => x.GetByPageAsync(It.IsAny<Int32>(), It.IsAny<Int32>(), It.IsAny<Int32?>(), It.IsAny<Int32?>())).ReturnsAsync((PaginatedItems<Item>)null);
 
             // Act
-            var result = await _bffItemService.GetByPageAsync(1, 1, null, null);
+            var result = await _bffItemService.GetByPageAsync(1, 1, null);
 
             // Assert
             Assert.Null(result);
