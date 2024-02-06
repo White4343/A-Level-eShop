@@ -3,3 +3,4 @@ global using Basket.API.Data;
 global using AutoMapper;
 global using Basket.API.Models.Dtos;
 global using Basket.API.Models.Request;
+global using Basket.API.Models.Response;
