@@ -8,6 +8,7 @@ namespace Basket.UnitTests.Services
     public class BasketServiceTest
     {
         private readonly IBasketService _basketService;
+        private readonly Mock<ICatalogService> _catalogServiceMock;
         private readonly Mock<IBasketRepository> _basketRepositoryMock;
         private readonly Mock<IDbContextWrapper<AppDbContext>> _dbContextWrapperMock;
         private readonly Mock<ILogger<BasketService>> _loggerMock;
@@ -54,7 +55,7 @@ namespace Basket.UnitTests.Services
             _loggerMock = new Mock<ILogger<BasketService>>();
             _mapperMock = new Mock<IMapper>();
 
-            _basketService = new BasketService(_basketRepositoryMock.Object, _loggerMock.Object, _mapperMock.Object);
+            _basketService = new BasketService(_basketRepositoryMock.Object, _catalogServiceMock.Object, _loggerMock.Object, _mapperMock.Object);
         }
 
         [Fact]
