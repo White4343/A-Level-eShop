@@ -133,6 +133,32 @@
         }
 
         [Fact]
+        public async Task PatchItemQuantityAsync_Success()
+        {
+            // Arrange
+            _itemRepositoryMock.Setup(x => x.PatchItemQuantityAsync(It.IsAny<Int32>(), It.IsAny<Int32>())).ReturnsAsync(_testItem);
+
+            // Act
+            var result = await _itemService.PatchItemQuantityAsync(_testItem.Id, 1);
+
+            // Assert
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public async Task PatchItemQuantityAsync_Fail()
+        {
+            // Arrange
+            _itemRepositoryMock.Setup(x => x.PatchItemQuantityAsync(It.IsAny<Int32>(), It.IsAny<Int32>())).ReturnsAsync((Item)null);
+
+            // Act
+            var result = await _itemService.PatchItemQuantityAsync(_testItem.Id, 1);
+
+            // Assert
+            Assert.Null(result);
+        }
+
+        [Fact]
         public async Task DeleteItemAsync_Success()
         {
             // Arrange
