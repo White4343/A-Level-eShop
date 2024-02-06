@@ -8,10 +8,11 @@ namespace Basket.API.Repositories
         private readonly ILogger<BasketRepository> _logger;
         private readonly IMapper _mapper;
 
-        public BasketRepository(AppDbContext context, ILogger<BasketRepository> logger)
+        public BasketRepository(AppDbContext context, ILogger<BasketRepository> logger, IMapper mapper)
         {
             _context = context;
             _logger = logger;
+            _mapper = mapper;
         }
 
         public async Task<BasketDto> CreateBasketAsync(Data.Entities.Basket basket)
@@ -25,9 +26,9 @@ namespace Basket.API.Repositories
 
             _context.Baskets.Add(basket);
 
-            await _context.SaveChangesAsync();
-
             var basketDto = _mapper.Map<BasketDto>(basket);
+
+            await _context.SaveChangesAsync();
 
             return basketDto;
         }
