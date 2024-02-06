@@ -61,6 +61,7 @@
 
             var itemDto = new ItemDto
             {
+                Id = itemResult.Id,
                 Name = itemResult.Name,
                 Description = itemResult.Description,
                 Price = itemResult.Price,
@@ -91,6 +92,24 @@
             return itemDto;
         }
 
+        public async Task<ItemDto> PatchItemQuantityAsync(int id, int quantity)
+        {
+            var itemResult = await _itemRepository.PatchItemQuantityAsync(id, quantity);
+
+            var itemDto = new ItemDto
+            {
+                Name = itemResult.Name,
+                Description = itemResult.Description,
+                Price = itemResult.Price,
+                PictureUrl = itemResult.PictureUrl,
+                AvailableStock = itemResult.AvailableStock,
+                TypeId = itemResult.TypeId,
+                BrandId = itemResult.BrandId
+            };
+
+            return itemDto;
+        }
+        
         public async Task<bool> DeleteItemAsync(int id)
         {
             return await _itemRepository.DeleteItemAsync(id);
