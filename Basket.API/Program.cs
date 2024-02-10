@@ -20,6 +20,7 @@ namespace Basket.API
             builder.Services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
                 {
+                    options.Audience = "basketapi";
                     options.Authority = authority;
 
                     options.TokenValidationParameters = new TokenValidationParameters
