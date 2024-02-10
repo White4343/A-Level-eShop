@@ -31,6 +31,8 @@ internal static class HostingExtensions
             options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
         });
 
+        builder.Services.AddCors();
+
         return builder.Build();
     }
     
@@ -48,6 +50,12 @@ internal static class HostingExtensions
         {
             app.UseDeveloperExceptionPage();
         }
+
+        app.UseCors(config => config
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+        );
 
         // uncomment if you want to add a UI
         app.UseStaticFiles();

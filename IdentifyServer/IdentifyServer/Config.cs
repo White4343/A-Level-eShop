@@ -15,7 +15,10 @@ public static class Config
         new ApiScope[]
         {
             new ApiScope(name: "catalog.fullaccess", displayName: "Catalog API"),
-            new ApiScope(name: "basket.fullaccess", displayName: "Basket API")
+            new ApiScope(name: "basket.fullaccess", displayName: "Basket API"),
+            new ApiScope(name: "basket.client", displayName: "Client Basket API"),
+            new ApiScope(name: "order.fullaccess", displayName: "Order API"),
+            new ApiScope(name: "order.client", displayName: "Client Order API"),
         };
 
     public static IEnumerable<Client> Clients =>
@@ -59,6 +62,31 @@ public static class Config
                 AllowedScopes =
                 {
                     "basket.fullaccess"
+                }
+            },
+            new Client
+            {
+                ClientId = "m2m.client",
+                ClientName = "Client",
+                AllowedGrantTypes = GrantTypes.ClientCredentials,
+                ClientSecrets =
+                {
+                    new Secret("secret".Sha256())
+                },
+                AllowedScopes = { "basket.client", "order.client" }
+            },
+            new Client
+            {
+                ClientId = "reactui",
+                AllowedGrantTypes = GrantTypes.Code,
+                RequireClientSecret = false,
+
+                RedirectUris = { "http://localhost:3000/signin-oidc" },
+                PostLogoutRedirectUris = { "http://localhost:3000" },
+                
+                AllowedScopes =
+                {
+                    "basket.client", "order.client"
                 }
             }
         };
