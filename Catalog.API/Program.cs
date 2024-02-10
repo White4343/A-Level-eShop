@@ -13,6 +13,7 @@ namespace Catalog.API
             builder.Services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
                 {
+                    options.Audience = "catalogapi";
                     options.Authority = authority;
 
                     options.TokenValidationParameters = new TokenValidationParameters
