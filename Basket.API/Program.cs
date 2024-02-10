@@ -43,6 +43,9 @@ namespace Basket.API
 
             builder.Services.AddAutoMapper(typeof(Program));
 
+            builder.Services.AddHttpClient();
+            builder.Services.AddTransient<ICatalogService, CatalogService>();
+
             builder.Services.AddTransient<IBasketRepository, BasketRepository>();
             builder.Services.AddTransient<IBasketService, BasketService>();
 

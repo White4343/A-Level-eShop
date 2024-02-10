@@ -80,6 +80,24 @@
             return item;
         }
 
+        public async Task<Item> PatchItemQuantityAsync(int id, int quantity)
+        {
+            var item = await _context.Items.FindAsync(id);
+
+            if (item == null)
+            {
+                _logger.LogError($"Item with id: {id}, not found.");
+
+                return null;
+            }
+
+            item.AvailableStock -= quantity;
+
+            await _context.SaveChangesAsync();
+
+            return item;
+        }
+
         public async Task<bool> DeleteItemAsync(int id)
         {
             var itemToDelete = await _context.Items.FindAsync(id);

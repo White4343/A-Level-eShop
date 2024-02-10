@@ -10,6 +10,8 @@
 
         Task<Item> UpdateItemAsync(Item item);
 
+        Task<Item> PatchItemQuantityAsync(int id, int quantity);
+
         Task<bool> DeleteItemAsync(int id);
     }
 }

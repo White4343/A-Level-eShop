@@ -1,6 +1,6 @@
 ﻿namespace Catalog.API.Controllers
 {
-    [Authorize(Policy = "Catalog.FullAccess")]
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class ItemController : ControllerBase
@@ -61,6 +61,20 @@
             var updated = await _itemService.UpdateItemAsync(item);
 
             if (updated == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
+        }
+
+        [HttpPatch("{id}", Name = "PatchItemQuantity")]
+        [AllowAnonymous]
+        public async Task<ActionResult<bool>> Patch(int id, [FromQuery] int quantity)
+        {
+            var patched = await _itemService.PatchItemQuantityAsync(id, quantity);
+
+            if (patched == null)
             {
                 return BadRequest();
             }
