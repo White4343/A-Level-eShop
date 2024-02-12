@@ -82,7 +82,8 @@ public static class Config
                 RequireClientSecret = false,
 
                 RedirectUris = { "http://localhost:3000/signin-oidc" },
-                PostLogoutRedirectUris = { "http://localhost:3000" },
+                PostLogoutRedirectUris  = { "http://localhost:3000" },
+                FrontChannelLogoutUri  = "http://localhost:3000",
                 
                 AllowedScopes =
                 {
