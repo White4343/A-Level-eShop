@@ -28,6 +28,7 @@
         }
 
         [HttpGet(Name = "GetBrands")]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Brand>>> Get()
         {
             var brands = await _brandService.GetBrandsAsync();
@@ -41,6 +42,7 @@
         }
 
         [HttpGet("{id}", Name = "GetBrandById")]
+        [AllowAnonymous]
         public async Task<ActionResult<Brand>> Get(int id)
         {
             var brand = await _brandService.GetBrandByIdAsync(id);

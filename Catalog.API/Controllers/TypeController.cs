@@ -30,6 +30,7 @@ namespace Catalog.API.Controllers
         }
 
         [HttpGet(Name = "GetTypes")]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Type>>> Get()
         {
             var types = await _typeService.GetTypesAsync();
@@ -43,6 +44,7 @@ namespace Catalog.API.Controllers
         }
 
         [HttpGet("{id}", Name = "GetTypeById")]
+        [AllowAnonymous]
         public async Task<ActionResult<Type>> Get(int id)
         {
             var type = await _typeService.GetTypeByIdAsync(id);
