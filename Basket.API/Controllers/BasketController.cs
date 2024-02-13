@@ -136,7 +136,7 @@ namespace Basket.API.Controllers
         [HttpPost("DeleteBasketByLogin")]
         public async Task<ActionResult<bool>> DeleteBasketByLoginAsync()
         {
-            var login = User.FindFirstValue(ClaimTypes.Name);
+            var login = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var result = await _basketService.DeleteBasketByLoginAsync(login);
 
