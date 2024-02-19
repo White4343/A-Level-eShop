@@ -1,4 +1,6 @@
 ﻿using Duende.IdentityServer.Models;
+using IdentityServer;
+using static System.Net.WebRequestMethods;
 
 namespace IdentifyServer;
 
@@ -41,8 +43,8 @@ public static class Config
                 AllowedGrantTypes = GrantTypes.Implicit,
                 AllowAccessTokensViaBrowser = true,
 
-                RedirectUris = { "http://localhost:5106/swagger/oauth2-redirect.html" },
-                PostLogoutRedirectUris = { "http://localhost:5106/swagger/" },
+                RedirectUris = { WebApiLinks.CatalogApi + "/swagger/oauth2-redirect.html" },
+                PostLogoutRedirectUris = { WebApiLinks.CatalogApi + "/swagger/" },
 
                 AllowedScopes =
                 {
@@ -56,12 +58,26 @@ public static class Config
                 AllowedGrantTypes = GrantTypes.Implicit,
                 AllowAccessTokensViaBrowser = true,
 
-                RedirectUris = { "http://localhost:5153/swagger/oauth2-redirect.html" },
-                PostLogoutRedirectUris = { "http://localhost:5153/swagger/" },
+                RedirectUris = { WebApiLinks.BasketApi + "/swagger/oauth2-redirect.html" },
+                PostLogoutRedirectUris = { WebApiLinks.BasketApi + "/swagger/" },
 
                 AllowedScopes =
                 {
-                    "basket.fullaccess"
+                    "basket.fullaccess", "basket.client"
+                }
+            },
+            new Client
+            {
+                ClientId = "orderswaggerui",
+                ClientName = "Order Swagger UI",
+                AllowedGrantTypes = GrantTypes.Implicit,
+                AllowAccessTokensViaBrowser = true,
+                RedirectUris = { WebApiLinks.OrderApi + "/swagger/oauth2-redirect.html" },
+                PostLogoutRedirectUris = { WebApiLinks.OrderApi + "/swagger/" },
+
+                AllowedScopes =
+                {
+                    "order.fullaccess", "order.client"
                 }
             },
             new Client
@@ -81,9 +97,9 @@ public static class Config
                 AllowedGrantTypes = GrantTypes.Code,
                 RequireClientSecret = false,
 
-                RedirectUris = { "http://localhost:3000/signin-oidc" },
-                PostLogoutRedirectUris  = { "http://localhost:3000" },
-                FrontChannelLogoutUri  = "http://localhost:3000",
+                RedirectUris = { WebApiLinks.ReactUI + "/signin-oidc" },
+                PostLogoutRedirectUris  = { WebApiLinks.ReactUI },
+                FrontChannelLogoutUri  = WebApiLinks.ReactUI,
                 
                 AllowedScopes =
                 {

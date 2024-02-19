@@ -1,3 +1,4 @@
+using IdentityServer;
 using Serilog;
 
 namespace IdentifyServer;
@@ -10,6 +11,11 @@ internal static class HostingExtensions
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
             .AddEnvironmentVariables().Build();
+
+        WebApiLinks.CatalogApi = configuration["CatalogApi"];
+        WebApiLinks.BasketApi = configuration["BasketApi"];
+        WebApiLinks.OrderApi = configuration["OrderApi"];
+        WebApiLinks.ReactUI = configuration["ReactUI"];
 
         // uncomment if you want to add a UI
         builder.Services.AddRazorPages();
