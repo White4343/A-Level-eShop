@@ -1,12 +1,15 @@
-using Basket.API.Models;
-using Basket.API.Repositories;
-using Basket.API.Repositories.Interfaces;
-using Basket.API.Services;
-using Basket.API.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Order.API.Data;
+using Order.API.Models;
+using Order.API.Repositories;
+using Order.API.Repositories.Interfaces;
+using Order.API.Services;
+using Order.API.Services.Interfaces;
+using IBasketService = Order.API.Services.Interfaces.IBasketService;
 
-namespace Basket.API
+namespace Order.API
 {
     public class Program
     {
@@ -14,7 +17,7 @@ namespace Basket.API
         {
             var configuration = GetConfiguration();
 
-            WebApiLinks.CatalogApi = configuration["CatalogApi"];
+            WebApiLinks.BasketApi = configuration["BasketApi"];
 
             var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +26,7 @@ namespace Basket.API
             builder.Services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
                 {
-                    options.Audience = "basketapi";
+                    options.Audience = "orderapi";
                     options.Authority = authority;
 
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -36,15 +39,15 @@ namespace Basket.API
 
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("Basket.FullAccess", policy =>
+                options.AddPolicy("Order.FullAccess", policy =>
                 {
                     policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("scope", "basket.fullaccess");
+                    policy.RequireClaim("scope", "order.fullaccess");
                 });
-                options.AddPolicy("Basket.Client", policy =>
+                options.AddPolicy("Order.Client", policy =>
                 {
                     policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("scope", "basket.client");
+                    policy.RequireClaim("scope", "order.client");
                 });
             });
 
@@ -53,17 +56,20 @@ namespace Basket.API
             builder.Services.AddAutoMapper(typeof(Program));
 
             builder.Services.AddHttpClient();
-            builder.Services.AddTransient<ICatalogService, CatalogService>();
-
-            builder.Services.AddTransient<IBasketRepository, BasketRepository>();
             builder.Services.AddTransient<IBasketService, BasketService>();
+
+            builder.Services.AddTransient<IOrderRepository, OrderRepository>();
+            builder.Services.AddTransient<IOrderService, OrderService>();
+
+            builder.Services.AddTransient<IOrderBasketRepository, OrderBasketRepository>();
+            builder.Services.AddTransient<IOrderBasketService, OrderBasketService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Basket.API", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Order.API", Version = "v1" });
 
                 options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                 {
@@ -76,8 +82,8 @@ namespace Basket.API
                             TokenUrl = new Uri($"{authority}/connect/token"),
                             Scopes = new Dictionary<string, string>
                             {
-                                { "basket.fullaccess", "Basket API" },
-                                { "basket.client", "Client Basket API" },
+                                { "order.fullaccess", "Order API" },
+                                { "order.client", "Client Order API" }
                             }
                         }
                     }
@@ -94,7 +100,7 @@ namespace Basket.API
                                 Type = ReferenceType.SecurityScheme
                             }
                         },
-                        new[] { "basket.fullaccess", "basket.client" }
+                        new[] { "order.fullaccess", "order.client" }
                     }
                 });
             });
@@ -121,9 +127,9 @@ namespace Basket.API
                 app.UseSwagger();
                 app.UseSwaggerUI(setup =>
                 {
-                    setup.SwaggerEndpoint($"{configuration["PathBase"]}/swagger/v1/swagger.json", "Basket.API v1");
-                    setup.OAuthClientId("basketswaggerui");
-                    setup.OAuthAppName("Basket Swagger UI");
+                    setup.SwaggerEndpoint($"{configuration["PathBase"]}/swagger/v1/swagger.json", "Order.API v1");
+                    setup.OAuthClientId("orderswaggerui");
+                    setup.OAuthAppName("Order Swagger UI");
                 });
             }
 
@@ -132,7 +138,6 @@ namespace Basket.API
 
             app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.MapControllers();
 

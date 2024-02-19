@@ -59,6 +59,12 @@
         {
             var itemResult = await _itemRepository.GetItemByIdAsync(id);
 
+            if (itemResult == null)
+            {
+                _logger.LogError($"Item with id: {id}, not found.");
+                return null;
+            }
+
             var itemDto = new ItemDto
             {
                 Id = itemResult.Id,

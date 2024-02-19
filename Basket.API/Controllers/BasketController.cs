@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Basket.API.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "Basket.Client")]
     [ApiController]
     [Route("[controller]")]
     public class BasketController : ControllerBase
@@ -43,6 +43,7 @@ namespace Basket.API.Controllers
             return Ok(basket);
         }
 
+        [Authorize(Policy = "Basket.FullAccess")]
         [HttpGet("GetBaskets")]
         public async Task<ActionResult<IEnumerable<BasketDto>>> GetBasketsAsync()
         {
@@ -75,6 +76,7 @@ namespace Basket.API.Controllers
             return Ok(baskets);
         }
 
+        [Authorize(Policy = "Basket.FullAccess")]
         [HttpGet("{id}", Name = "GetBasketById")]
         public async Task<ActionResult<BasketDto>> GetBasketByIdAsync(int id)
         {
