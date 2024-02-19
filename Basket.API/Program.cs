@@ -1,3 +1,4 @@
+using Basket.API.Models;
 using Basket.API.Repositories;
 using Basket.API.Repositories.Interfaces;
 using Basket.API.Services;
@@ -12,6 +13,8 @@ namespace Basket.API
         public static void Main(string[] args)
         {
             var configuration = GetConfiguration();
+
+            WebApiLinks.CatalogApi = configuration["CatalogApi"];
 
             var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +40,11 @@ namespace Basket.API
                 {
                     policy.RequireAuthenticatedUser();
                     policy.RequireClaim("scope", "basket.fullaccess");
+                });
+                options.AddPolicy("Basket.Client", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", "basket.client");
                 });
             });
 
@@ -68,7 +76,8 @@ namespace Basket.API
                             TokenUrl = new Uri($"{authority}/connect/token"),
                             Scopes = new Dictionary<string, string>
                             {
-                                { "basket.fullaccess", "Basket API" }
+                                { "basket.fullaccess", "Basket API" },
+                                { "basket.client", "Client Basket API" },
                             }
                         }
                     }
@@ -85,7 +94,7 @@ namespace Basket.API
                                 Type = ReferenceType.SecurityScheme
                             }
                         },
-                        new[] { "basket.fullaccess" }
+                        new[] { "basket.fullaccess", "basket.client" }
                     }
                 });
             });

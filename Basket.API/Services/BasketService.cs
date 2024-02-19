@@ -38,14 +38,14 @@ namespace Basket.API.Services
                 UserLogin = login
             };
 
-            var itemQuantity = await PatchItemQuantity(basket.ItemId, basket.Quantity);
+            /*var itemQuantity = await PatchItemQuantity(basket.ItemId, basket.Quantity);
 
             if (itemQuantity == false)
             {
                 _logger.LogError("Item not available.");
 
                 return null;
-            }
+            }*/
 
             return await _basketRepository.CreateBasketAsync(basketEntity);
         }

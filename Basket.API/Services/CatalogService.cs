@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Text.Json;
+using Basket.API.Models;
 using Basket.API.Services.Interfaces;
 
 namespace Basket.API.Services
@@ -19,7 +20,7 @@ namespace Basket.API.Services
         public async Task<ItemResponse> GetItemByIdAsync(int id)
         {
             var client = _httpClientFactory.CreateClient("CatalogService");
-            var response = await client.GetAsync($"http://localhost:5106/Item/{id}");
+            var response = await client.GetAsync($"{WebApiLinks.CatalogApi}/Item/{id}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -43,7 +44,7 @@ namespace Basket.API.Services
             var client = _httpClientFactory.CreateClient("CatalogService");
             var body = new StringContent(JsonSerializer.Serialize(new { quantity }), Encoding.UTF8, "application/json");
 
-            var response = await client.PatchAsync($"http://localhost:5106/Item/{id}?quantity={quantity}", body);
+            var response = await client.PatchAsync($"{WebApiLinks.CatalogApi}/Item/{id}?quantity={quantity}", body);
 
             if (response.IsSuccessStatusCode)
             { 
